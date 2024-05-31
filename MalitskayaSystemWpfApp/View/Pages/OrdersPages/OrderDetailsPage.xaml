@@ -1,0 +1,113 @@
+﻿<Page x:Class="MalitskayaSystemWpfApp.View.Pages.OrdersPages.OrderDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MalitskayaSystemWpfApp.View.Pages.OrdersPages"
+      mc:Ignorable="d" 
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      d:DesignHeight="930" d:DesignWidth="1900"
+      Title="OrderDetailsPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="348*"/>
+            <ColumnDefinition Width="127*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0"
+            x:Name="DGrid" IsReadOnly="True"
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="False"
+            CanUserSortColumns = "False"
+            AutoGenerateColumns="False"
+            HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+            FontSize="10"
+                  ItemsSource="{Binding DetailsContent}"
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding id}" Header="ID"/>
+                <DataGridTextColumn Binding="{Binding OrderID_id}" Header="Заказ"/>
+                <DataGridTextColumn Binding="{Binding FirstName}" Header="Имя"/>
+                <DataGridTextColumn Binding="{Binding LastName}" Header="Фамилия"/>
+                <DataGridTextColumn Binding="{Binding Phone}" Header="Телефон"/>
+                <DataGridCheckBoxColumn Binding="{Binding isProfi}" Header="Профи"/>
+                <DataGridTextColumn Binding="{Binding Articul}" Header="Артикул"/>
+                <DataGridTextColumn Binding="{Binding ProductName}" Header="Продукт"/>
+                <DataGridTextColumn Binding="{Binding Price}" Header="Цена"/>
+                <DataGridTextColumn Binding="{Binding Quantity}" Header="Количество"/>
+                <DataGridTextColumn Binding="{Binding Amount}" Header="Общая цена"/>
+            </DataGrid.Columns>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:CallMethodAction
+TargetObject="{Binding}"
+MethodName="gridHandler" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </DataGrid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="500*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Row="0" Margin="5" Grid.ColumnSpan="2"
+              TextWrapping="Wrap"
+               materialDesign:HintAssist.Hint="Количество товара"
+              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     Text="{Binding Detail.Quantity}"
+              FontSize="13" />
+            <Button x:Name="EditBtn" Command="{Binding Edit}"
+                Grid.Row="1" Margin="5,0,5,0" Content="Изменить" FontSize="15"
+                materialDesign:ButtonAssist.CornerRadius="5"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                ToolTip="MaterialDesignRaisedLightButton with Round Corners">
+            </Button>
+            <Button x:Name="DeleteBtn" Grid.Column="1" Command="{Binding Delete}"
+                Grid.Row="1" Margin="5,0,5,0" Content="Удалить" FontSize="15"
+                materialDesign:ButtonAssist.CornerRadius="5"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                ToolTip="MaterialDesignRaisedLightButton with Round Corners" Click="DeleteBtn_Click">
+            </Button>
+            <TextBlock FontSize="20" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Посмотреть определенный заказ"/>
+            <ComboBox Grid.Row="3" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2" ItemsSource="{Binding OrdersContent}"
+                      DisplayMemberPath="id" 
+                materialDesign:ColorZoneAssist.Mode="SecondaryLight"
+                materialDesign:HintAssist.HelperText="Выберите номер заказа"
+                materialDesign:HintAssist.Hint="Номер заказа"
+                materialDesign:TextFieldAssist.HasClearButton="True" 
+                materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}" Height="36"
+                >
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:CallMethodAction
+            TargetObject="{Binding}"
+            MethodName="comboBoxHandler" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ComboBox>
+            <Button x:Name="UploadBtn" Grid.Column="0" Grid.ColumnSpan="2"
+                Grid.Row="4" Margin="5,0,5,0" Content="Выгрузить чек" FontSize="15" Command="{Binding Receipt}"
+                materialDesign:ButtonAssist.CornerRadius="5"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                ToolTip="MaterialDesignRaisedLightButton with Round Corners" Click="UploadBtn_Click">
+            </Button>
+            <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding TotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"/>
+        </Grid>
+    </Grid>
+</Page>

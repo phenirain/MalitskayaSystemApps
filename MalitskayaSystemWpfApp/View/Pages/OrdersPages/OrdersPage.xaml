@@ -1,0 +1,153 @@
+﻿<Page x:Class="MalitskayaSystemWpfApp.View.Pages.OrdersPages.OrdersPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MalitskayaSystemWpfApp.View.Pages.OrdersPages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      mc:Ignorable="d" 
+      d:DesignHeight="930" d:DesignWidth="1900"
+      Title="OrdersPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="348*"/>
+            <ColumnDefinition Width="127*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0"
+            x:Name="DGrid" IsReadOnly="True"
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="False"
+            CanUserSortColumns = "False"
+            AutoGenerateColumns="False"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+            HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Visible"
+            FontSize="10"
+                  ItemsSource="{Binding OrdersContent}" SelectionChanged="DGrid_SelectionChanged"
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding id}" Header="ID"/>
+                <DataGridTextColumn Binding="{Binding OrderDescription}" Header="Описание">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="MaxWidth" Value="300" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding FirstName}" Header="Имя"/>
+                <DataGridTextColumn Binding="{Binding LastName}" Header="Фамилия"/>
+                <DataGridTextColumn Binding="{Binding Phone}" Header="Телефон"/>
+                <DataGridCheckBoxColumn Binding="{Binding isProfi}" Header="Профи"/>
+                <DataGridTextColumn Binding="{Binding City}" Header="Город"/>
+                <DataGridTextColumn Binding="{Binding ShippingTypeName}" Header="Тип доставки"/>
+                <DataGridTextColumn Binding="{Binding PaymentMethodName}" Header="Способ оплаты"/>
+                <DataGridTextColumn Binding="{Binding TotalAmount}" Header="Общая стоимость"/>
+                <DataGridTextColumn Binding="{Binding ReceivedAmount}" Header="Получено"/>
+                <DataGridTextColumn Binding="{Binding OrderChange}" Header="Сдача"/>
+                <DataGridTextColumn Binding="{Binding OrderDate}" Header="Дата"/>
+                <DataGridTextColumn Binding="{Binding OrderStatusName}" Header="Статус"/>
+            </DataGrid.Columns>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:CallMethodAction
+TargetObject="{Binding}"
+MethodName="gridHandler" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </DataGrid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="43*"/>
+                <RowDefinition Height="43*"/>
+                <RowDefinition Height="43*"/>
+                <RowDefinition Height="56*"/>
+                <RowDefinition Height="45*"/>
+                <RowDefinition Height="58*"/>
+                <RowDefinition Height="218*"/>
+                <RowDefinition Height="97*"/>
+                <RowDefinition Height="94*"/>
+                <RowDefinition Height="58*"/>
+                <RowDefinition Height="58*"/>
+                <RowDefinition Height="58*"/>
+                <RowDefinition Height="58*"/>
+                <RowDefinition Height="58*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Дополнительные таблицы" HorizontalAlignment="Center" FontSize="20" />
+            <Button x:Name="PaymentMethodBtn"
+            Grid.Row="1" Grid.Column="0" Margin="5,0,5,0" Content="Платежная система" FontSize="15"
+            materialDesign:ButtonAssist.CornerRadius="5"
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+            Style="{StaticResource MaterialDesignRaisedLightButton}"
+            ToolTip="MaterialDesignRaisedLightButton with Round Corners" Click="PaymentMethodBtn_Click">
+            </Button>
+            <Button x:Name="OrdersStatusBtn"
+            Grid.Row="2" Grid.Column="0" Margin="5,0,5,0" Content="Статусы заказов" FontSize="15"
+            materialDesign:ButtonAssist.CornerRadius="5"
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+            Style="{StaticResource MaterialDesignRaisedLightButton}"
+            ToolTip="MaterialDesignRaisedLightButton with Round Corners" Click="OrdersStatusBtn_Click">
+            </Button>
+            <TextBox Grid.Row="3" Grid.RowSpan="4" Margin="5,0,5,0"
+                     TextWrapping="Wrap"
+                      materialDesign:HintAssist.Hint="Описание заказа"
+             Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding Order.OrderDescription}"
+             FontSize="14" />
+            
+            <ComboBox Grid.Row="7" Grid.Column="0" Margin="5,0,5,0" x:Name="Method"
+                materialDesign:ColorZoneAssist.Mode="SecondaryLight"
+                materialDesign:HintAssist.HelperText="Выберите способ оплаты"
+                materialDesign:HintAssist.Hint="Способ оплаты" DisplayMemberPath="PaymentMethodName"
+                materialDesign:TextFieldAssist.HasClearButton="True" ItemsSource="{Binding PayContent}"
+                materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}" Height="37"
+                >
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:CallMethodAction
+            TargetObject="{Binding}"
+            MethodName="comboBoxHandler" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ComboBox>
+            <TextBox Grid.Row="10" materialDesign:HintAssist.Hint="Получено" Grid.ColumnSpan="2"
+Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="5,0,5,0" Text="{Binding Order.ReceivedAmount}"
+FontSize="14"  ></TextBox>
+            <TextBlock Grid.Row="8" Text="Дата заказа" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <DatePicker Grid.Row="9" Height="40" Text="{Binding Order.OrderDate}" x:Name="Datepck" Focusable="False"></DatePicker>
+            <ComboBox Grid.Row="11" Grid.Column="0" Margin="5,0,5,0" x:Name="Status"
+                materialDesign:ColorZoneAssist.Mode="SecondaryLight"
+                materialDesign:HintAssist.HelperText="Выберите статус"
+                materialDesign:HintAssist.Hint="Статус"
+                materialDesign:TextFieldAssist.HasClearButton="True" DisplayMemberPath="OrderStatusName" ItemsSource="{Binding StatusContent}"
+                materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}" Height="37"
+                >
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:CallMethodAction
+            TargetObject="{Binding}"
+            MethodName="comboBoxHandler" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ComboBox>
+            <Button x:Name="EditBtn"
+            Grid.Row="12" Grid.Column="0" Margin="5,0,5,0" Content="Изменить" FontSize="15"
+            materialDesign:ButtonAssist.CornerRadius="5"
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+            Style="{StaticResource MaterialDesignRaisedLightButton}"
+            ToolTip="MaterialDesignRaisedLightButton with Round Corners" Click="EditBtn_Click">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <b:CallMethodAction
+TargetObject="{Binding}"
+MethodName="editCommand" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>
